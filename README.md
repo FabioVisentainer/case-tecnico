@@ -19,9 +19,8 @@ API Spring Boot com endpoint:
 
 Banco de dados MySQL (Hibernate/JPA):
 
-- Banco: `bd_casetecnico`
-- Usuario: `root` (ajuste se necessario)
-- Senha: `C@seTecn!co123`
+- Configuracao por perfis: `dev` (local) e `docker`
+- Banco/usuario/senha via variaveis de ambiente (`DB_*`)
 - Hibernate: `spring.jpa.hibernate.ddl-auto=update`
 
 Executar localmente:
@@ -35,6 +34,12 @@ No Windows PowerShell:
 
 ```powershell
 Set-Location backend
+Set-Item Env:DB_HOST localhost
+Set-Item Env:DB_PORT 3306
+Set-Item Env:DB_NAME bd_casetecnico
+Set-Item Env:DB_USER root
+Set-Item Env:DB_PASSWORD "sua-senha"
+Set-Item Env:APP_JWT_SECRET "uma-chave-jwt-bem-grande"
 .\gradlew.bat bootRun
 ```
 
@@ -140,7 +145,9 @@ Arquivo: `frontend/vite.config.js`
 
 Na raiz do projeto:
 
-```bash
+```powershell
+Copy-Item .env.example .env
+# ajuste DB_PASSWORD e APP_JWT_SECRET no arquivo .env
 docker compose up --build
 ```
 
