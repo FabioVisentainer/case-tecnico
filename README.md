@@ -99,8 +99,12 @@ Invoke-RestMethod -Uri "http://localhost:8080/api/private/hello" -Headers @{ Aut
 
 Aplicacao React com React Router:
 
-- `/`: pagina principal que consome `/api/hello`
+- `/login`: tela de autenticacao
+- `/`: pagina principal protegida que consome `/api/private/hello`
 - `/about`: pagina de exemplo
+
+Ao acessar o frontend sem autenticacao, o usuario e redirecionado para `/login`.
+Na tela de login ha uma lista de usuarios pre-cadastrados para entrar com um clique.
 
 O frontend nao usa URL hardcoded do backend; consome `/api/hello` e o Vite redireciona via proxy.
 

@@ -17,7 +17,7 @@ public record UsuarioCadastroRequest(
 
         @NotBlank(message = "Username obrigatório.")
         @Size(max = 40, message = "Username deve ter no máximo 40 caracteres.")
-        @Pattern(regexp = "^[A-Za-z0-9._-]+$", message = "Username invalido. Nao use espaços.")
+        @Pattern(regexp = "^[A-Za-z0-9._-]+$", message = "Username inválido. Não use espaços.")
         String username,
 
         @NotBlank(message = "CPF obrigatório.")

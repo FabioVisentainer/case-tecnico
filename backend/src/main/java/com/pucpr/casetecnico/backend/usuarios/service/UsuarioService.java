@@ -73,6 +73,11 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.findAll().stream().map(this::toResponse).toList();
     }
 
+    public Usuario buscarPorUsername(String username) {
+        return usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
+    }
+
     public void criarSeNaoExistir(String nome, String username, String cpf, EnumPapelUsuario papel, String senha, boolean ativo) {
         String usernameNormalizado = normalizarUsername(username);
         String cpfNormalizado = normalizarCpf(cpf);
@@ -95,7 +100,7 @@ public class UsuarioService implements UserDetailsService {
     private String normalizarNome(String nome) {
         String nomeNormalizado = nome.trim().replaceAll("\\s+", " ");
         if (nomeNormalizado.isBlank()) {
-            throw new IllegalArgumentException("Nome obrigatorio.");
+            throw new IllegalArgumentException("Nome obrigatório.");
         }
         return nomeNormalizado;
     }
@@ -103,7 +108,7 @@ public class UsuarioService implements UserDetailsService {
     private String normalizarUsername(String username) {
         String usernameNormalizado = username.trim().toLowerCase();
         if (!USERNAME_PATTERN.matcher(usernameNormalizado).matches()) {
-            throw new IllegalArgumentException("Username invalido. Use apenas letras minusculas, numeros, ponto, underline ou hifen, sem espacos.");
+            throw new IllegalArgumentException("Username invalido. Use apenas letras minusculas, números, ponto, underline ou hífen, sem espaços.");
         }
         return usernameNormalizado;
     }

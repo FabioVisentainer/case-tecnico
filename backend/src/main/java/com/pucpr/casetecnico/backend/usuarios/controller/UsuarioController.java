@@ -25,7 +25,6 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-
     @PostMapping
     public ResponseEntity<?> cadastrar(
             @Valid @RequestBody
