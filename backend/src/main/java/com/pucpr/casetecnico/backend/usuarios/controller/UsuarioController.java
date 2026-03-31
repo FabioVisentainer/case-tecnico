@@ -3,6 +3,8 @@ package com.pucpr.casetecnico.backend.usuarios.controller;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,10 @@ public class UsuarioController {
 
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody UsuarioCadastroRequest request) {
+    public ResponseEntity<?> cadastrar(
+            @Valid @RequestBody
+            UsuarioCadastroRequest request
+    ) {
         try {
             UsuarioResponse response = usuarioService.cadastrarPorAdmin(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);

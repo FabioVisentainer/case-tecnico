@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.pucpr.casetecnico.backend.usuarios.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByNome(String nome);
+    Optional<Usuario> findByUsername(String username);
 
-    boolean existsByNome(String nome);
+    boolean existsByUsername(String username);
+
+    boolean existsByCpf(String cpf);
 }
 
 

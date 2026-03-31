@@ -63,12 +63,29 @@ Usuarios de carga inicial (dataloader):
 Exemplo de login no PowerShell:
 
 ```powershell
-$body = @{ nome = "admin"; senha = "admin123" } | ConvertTo-Json
+$body = @{ username = "admin"; senha = "admin123" } | ConvertTo-Json
 $auth = Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/auth/login" -ContentType "application/json" -Body $body
 $auth
 ```
 
-> O payload de login usa `nome` e `senha`.
+> O payload de login usa `username` e `senha`.
+
+Cadastro de usuario (ADMIN):
+
+```json
+{
+  "nome": "  Maria   da   Silva  ",
+  "username": "maria.silva",
+  "cpf": "123.456.789-09",
+  "papel": "ALUNO",
+  "senha": "1234",
+  "ativo": true
+}
+```
+
+- `nome`: trim + colapso de espacos internos
+- `username`: unico, sem espacos, apenas `[a-z0-9._-]`
+- `cpf`: unico e validado (aceita formatado ou so digitos)
 
 Exemplo de chamada protegida:
 

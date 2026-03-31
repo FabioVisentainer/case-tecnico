@@ -22,8 +22,14 @@ import com.pucpr.casetecnico.backend.shared.model.AuditoriaEntidade;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Usuario extends AuditoriaEntidade {
 
-    @Column(nullable = false, unique = true, length = 80)
+    @Column(nullable = false, length = 120)
     private String nome;
+
+    @Column(nullable = false, unique = true, length = 40)
+    private String username;
+
+    @Column(nullable = false, unique = true, length = 11)
+    private String cpf;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
