@@ -14,21 +14,21 @@ public class UsuarioDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        usuarioService.criarSeNaoExistir("Fabio Costa", "admin", gerarCpfValido(1),
+        usuarioService.criarSeNaoExistir("Fabio Costa", "fabio.costa", gerarCpfValido(1),
                 EnumPapelUsuario.ADMINISTRADOR, "admin123", true);
 
-        usuarioService.criarSeNaoExistir("Mariana Alves", "professor1", gerarCpfValido(2),
+        usuarioService.criarSeNaoExistir("Mariana Alves", "mariana.alves", gerarCpfValido(2),
                 EnumPapelUsuario.PROFESSOR, "prof123", true);
-        usuarioService.criarSeNaoExistir("Ricardo Nogueira", "professor2", gerarCpfValido(3),
+        usuarioService.criarSeNaoExistir("Ricardo Nogueira", "ricardo.nogueira", gerarCpfValido(3),
                 EnumPapelUsuario.PROFESSOR, "prof123", true);
 
-        usuarioService.criarSeNaoExistir("Ana Beatriz Lima", "aluno1", gerarCpfValido(4), EnumPapelUsuario.ALUNO, "aluno123", true);
-        usuarioService.criarSeNaoExistir("Bruno Henrique Souza", "aluno2", gerarCpfValido(5), EnumPapelUsuario.ALUNO, "aluno123", true);
-        usuarioService.criarSeNaoExistir("Carolina Martins", "aluno3", gerarCpfValido(6), EnumPapelUsuario.ALUNO, "aluno123", true);
-        usuarioService.criarSeNaoExistir("Daniel Rocha", "aluno4", gerarCpfValido(7), EnumPapelUsuario.ALUNO, "aluno123", true);
-        usuarioService.criarSeNaoExistir("Eduarda Fernandes", "aluno5", gerarCpfValido(8), EnumPapelUsuario.ALUNO, "aluno123", true);
-        usuarioService.criarSeNaoExistir("Felipe Araujo", "aluno6", gerarCpfValido(9), EnumPapelUsuario.ALUNO, "aluno123", true);
-        usuarioService.criarSeNaoExistir("Gabriela Teixeira", "aluno7", gerarCpfValido(10), EnumPapelUsuario.ALUNO, "aluno123", true);
+        usuarioService.criarSeNaoExistir("Ana Beatriz Lima", "ana.beatriz", gerarCpfValido(4), EnumPapelUsuario.ALUNO, "aluno123", true);
+        usuarioService.criarSeNaoExistir("Bruno Henrique Souza", "bruno.henrique", gerarCpfValido(5), EnumPapelUsuario.ALUNO, "aluno123", true);
+        usuarioService.criarSeNaoExistir("Carolina Martins", "carolina.martins", gerarCpfValido(6), EnumPapelUsuario.ALUNO, "aluno123", true);
+        usuarioService.criarSeNaoExistir("Daniel Rocha", "daniel.rocha", gerarCpfValido(7), EnumPapelUsuario.ALUNO, "aluno123", true);
+        usuarioService.criarSeNaoExistir("Eduarda Fernandes", "eduarda.fernandes", gerarCpfValido(8), EnumPapelUsuario.ALUNO, "aluno123", true);
+        usuarioService.criarSeNaoExistir("Felipe Araujo", "felipe.araujo", gerarCpfValido(9), EnumPapelUsuario.ALUNO, "aluno123", true);
+        usuarioService.criarSeNaoExistir("Gabriela Teixeira", "gabriela.teixeira", gerarCpfValido(10), EnumPapelUsuario.ALUNO, "aluno123", true);
     }
 
     private String gerarCpfValido(int baseNumerica) {

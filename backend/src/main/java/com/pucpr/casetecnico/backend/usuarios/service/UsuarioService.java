@@ -3,6 +3,11 @@ package com.pucpr.casetecnico.backend.usuarios.service;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +21,8 @@ import com.pucpr.casetecnico.backend.usuarios.model.EnumPapelUsuario;
 import com.pucpr.casetecnico.backend.usuarios.model.Usuario;
 import com.pucpr.casetecnico.backend.usuarios.repository.UsuarioRepository;
 import com.pucpr.casetecnico.backend.usuarios.dto.UsuarioCadastroRequest;
+import com.pucpr.casetecnico.backend.usuarios.dto.UsuarioAtualizacaoRequest;
+import com.pucpr.casetecnico.backend.usuarios.dto.UsuarioPageResponse;
 import com.pucpr.casetecnico.backend.usuarios.dto.UsuarioResponse;
 
 @Service
@@ -73,9 +80,89 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.findAll().stream().map(this::toResponse).toList();
     }
 
+    public UsuarioPageResponse listarPaginado(int page, int size, boolean mostrarInativos, String q, EnumPapelUsuario papel) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.asc("nome").ignoreCase()));
+
+        Specification<Usuario> specification = (root, query, builder) -> {
+            var predicates = builder.conjunction();
+
+            if (!mostrarInativos) {
+                predicates = builder.and(predicates, builder.isTrue(root.get("ativo")));
+            }
+
+            if (papel != null) {
+                predicates = builder.and(predicates, builder.equal(root.get("papel"), papel));
+            }
+
+            if (q != null && !q.isBlank()) {
+                String termo = "%" + q.trim().toLowerCase() + "%";
+                predicates = builder.and(predicates, builder.or(
+                        builder.like(builder.lower(root.get("nome")), termo),
+                        builder.like(builder.lower(root.get("username")), termo)));
+            }
+
+            return predicates;
+        };
+
+        Page<Usuario> usuarios = usuarioRepository.findAll(specification, pageable);
+
+        Page<UsuarioResponse> responsePage = usuarios.map(this::toResponse);
+        return new UsuarioPageResponse(
+                responsePage.getContent(),
+                responsePage.getTotalElements(),
+                responsePage.getTotalPages(),
+                responsePage.getNumber(),
+                responsePage.getSize(),
+                responsePage.isFirst(),
+                responsePage.isLast());
+    }
+
+    public UsuarioResponse atualizarPorAdmin(Long id, UsuarioAtualizacaoRequest request) {
+        Usuario usuario = buscarPorId(id);
+
+        String nomeNormalizado = normalizarNome(request.nome());
+        String usernameNormalizado = normalizarUsername(request.username());
+        String cpfNormalizado = normalizarCpf(request.cpf());
+
+        if (!usernameNormalizado.equals(usuario.getUsername()) || !cpfNormalizado.equals(usuario.getCpf())) {
+            throw new IllegalArgumentException("CPF e username nao podem ser alterados.");
+        }
+
+        if (request.papel() == EnumPapelUsuario.ADMINISTRADOR) {
+            throw new IllegalArgumentException("Administrador nao pode ser criado por este endpoint.");
+        }
+
+        usuario.setNome(nomeNormalizado);
+        usuario.setPapel(request.papel());
+        usuario.setAtivo(request.ativo() == null || request.ativo());
+
+        if (request.senha() != null && !request.senha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(request.senha()));
+        }
+
+        Usuario salvo = usuarioRepository.save(usuario);
+        return toResponse(salvo);
+    }
+
+    public UsuarioResponse alterarStatus(Long id, boolean ativo) {
+        Usuario usuario = buscarPorId(id);
+        usuario.setAtivo(ativo);
+        Usuario salvo = usuarioRepository.save(usuario);
+        return toResponse(salvo);
+    }
+
+    public UsuarioResponse buscarPorIdResponse(Long id) {
+        return toResponse(buscarPorId(id));
+    }
+
     public Usuario buscarPorUsername(String username) {
         return usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
+    }
+
+    private Usuario buscarPorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado."));
     }
 
     public void criarSeNaoExistir(String nome, String username, String cpf, EnumPapelUsuario papel, String senha, boolean ativo) {

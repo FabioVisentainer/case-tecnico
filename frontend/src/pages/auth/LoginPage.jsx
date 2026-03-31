@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useAuth } from '../auth/AuthContext';
-import logoPuc from '../assets/LogoPucQuadrado.png';
+import { useAuth } from '../../auth/AuthContext';
+import logoPuc from '../../assets/LogoPucQuadrado.png';
 
 const TEST_USERS = [
-  { nome: 'Fabio Costa', username: 'admin', senha: 'admin123', papel: 'ADMINISTRADOR' },
-  { nome: 'Mariana Alves', username: 'professor1', senha: 'prof123', papel: 'PROFESSOR' },
-  { nome: 'Ricardo Nogueira', username: 'professor2', senha: 'prof123', papel: 'PROFESSOR' },
-  { nome: 'Ana Beatriz Lima', username: 'aluno1', senha: 'aluno123', papel: 'ALUNO' },
-  { nome: 'Bruno Henrique Souza', username: 'aluno2', senha: 'aluno123', papel: 'ALUNO' },
-  { nome: 'Carolina Martins', username: 'aluno3', senha: 'aluno123', papel: 'ALUNO' },
-  { nome: 'Daniel Rocha', username: 'aluno4', senha: 'aluno123', papel: 'ALUNO' },
-  { nome: 'Eduarda Fernandes', username: 'aluno5', senha: 'aluno123', papel: 'ALUNO' },
-  { nome: 'Felipe Araujo', username: 'aluno6', senha: 'aluno123', papel: 'ALUNO' },
-  { nome: 'Gabriela Teixeira', username: 'aluno7', senha: 'aluno123', papel: 'ALUNO' },
+  { nome: 'Fabio Costa', username: 'fabio.costa', senha: 'admin123', papel: 'ADMINISTRADOR' },
+  { nome: 'Mariana Alves', username: 'mariana.alves', senha: 'prof123', papel: 'PROFESSOR' },
+  { nome: 'Ricardo Nogueira', username: 'ricardo.nogueira', senha: 'prof123', papel: 'PROFESSOR' },
+  { nome: 'Ana Beatriz Lima', username: 'ana.beatriz', senha: 'aluno123', papel: 'ALUNO' },
+  { nome: 'Bruno Henrique Souza', username: 'bruno.henrique', senha: 'aluno123', papel: 'ALUNO' },
+  { nome: 'Carolina Martins', username: 'carolina.martins', senha: 'aluno123', papel: 'ALUNO' },
+  { nome: 'Daniel Rocha', username: 'daniel.rocha', senha: 'aluno123', papel: 'ALUNO' },
+  { nome: 'Eduarda Fernandes', username: 'eduarda.fernandes', senha: 'aluno123', papel: 'ALUNO' },
+  { nome: 'Felipe Araujo', username: 'felipe.araujo', senha: 'aluno123', papel: 'ALUNO' },
+  { nome: 'Gabriela Teixeira', username: 'gabriela.teixeira', senha: 'aluno123', papel: 'ALUNO' },
 ];
 
 const ROLE_LABELS = {
@@ -28,7 +28,6 @@ const ROLE_ORDER = ['ADMINISTRADOR', 'PROFESSOR', 'ALUNO'];
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [username, setUsername] = useState('');
   const [senha, setSenha] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -41,10 +40,8 @@ export default function LoginPage() {
     return acc;
   }, {});
 
-  const from = location.state?.from?.pathname || '/';
-
   if (isAuthenticated) {
-    return <Navigate to={from} replace />;
+    return <Navigate to="/" replace />;
   }
 
   async function handleLogin(event, credentials = null) {
@@ -62,7 +59,7 @@ export default function LoginPage() {
     try {
       await login(nextUsername, nextSenha);
       toast.success('Login realizado com sucesso.');
-      navigate(from, { replace: true });
+      navigate('/', { replace: true });
     } catch (loginError) {
       toast.error(loginError.message || 'Falha ao autenticar.');
     } finally {
@@ -151,4 +148,6 @@ export default function LoginPage() {
     </section>
   );
 }
+
+
 

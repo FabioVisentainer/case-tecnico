@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../../auth/AuthContext';
+import { getPrivateHello } from '../../services/home/homeService';
 
 export default function HomePage() {
   const { token } = useAuth();
@@ -11,17 +12,7 @@ export default function HomePage() {
 
     async function loadMessage() {
       try {
-        const response = await fetch('/api/private/hello', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await getPrivateHello(token);
         if (active) {
           setMessage(data.message ?? 'Resposta inesperada do backend.');
           setError('');
@@ -49,4 +40,6 @@ export default function HomePage() {
     </section>
   );
 }
+
+
 

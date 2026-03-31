@@ -1,10 +1,12 @@
 import { NavLink, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import LoginPage from './pages/LoginPage';
-import UsuariosPage from './pages/UsuariosPage';
+import HomePage from './pages/home/HomePage';
+import AboutPage from './pages/home/AboutPage';
+import LoginPage from './pages/auth/LoginPage';
+import UsuariosListPage from './pages/usuarios/UsuariosListPage';
+import UsuariosCreatePage from './pages/usuarios/UsuariosCreatePage';
+import UsuariosEditPage from './pages/usuarios/UsuariosEditPage';
 import logoPuc from './assets/LogoPucQuadrado.png';
 import './App.css';
 
@@ -22,11 +24,12 @@ function PrivateLayout({ user, isAdmin, onLogout }) {
       <header className="topbar">
         <div className="topbar-brand private">
           <img src={logoPuc} alt="PUCPR" className="brand-logo" />
-          <div>
+          <div className="user-identity">
             <h2>Case Tecnico</h2>
-            <p>
-              {papelLabel} {user?.nome ?? ''}
-            </p>
+            <div className="identity-row">
+              <span className="role-chip">{papelLabel}</span>
+              <p>{user?.nome ?? 'Usuario logado'}</p>
+            </div>
           </div>
         </div>
         <button type="button" onClick={onLogout} className="link-button">
@@ -66,7 +69,9 @@ export default function App() {
           <Route element={<PrivateLayout user={user} isAdmin={isAdmin} onLogout={logout} />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/usuarios" element={<UsuariosPage />} />
+            <Route path="/usuarios" element={<UsuariosListPage />} />
+            <Route path="/usuarios/criar" element={<UsuariosCreatePage />} />
+            <Route path="/usuarios/:id/editar" element={<UsuariosEditPage />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} replace />} />

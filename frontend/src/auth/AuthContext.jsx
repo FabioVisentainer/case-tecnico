@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { fetchCurrentUser, loginAuth } from '../services/auth/authService';
 
 const AuthContext = createContext(null);
 const STORAGE_KEY = 'case-tecnico-auth-token';
@@ -7,20 +8,6 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem(STORAGE_KEY) ?? '');
   const [user, setUser] = useState(null);
   const [isLoadingUser, setIsLoadingUser] = useState(Boolean(token));
-
-  async function fetchCurrentUser(nextToken) {
-    const response = await fetch('/api/auth/me', {
-      headers: {
-        Authorization: `Bearer ${nextToken}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Sessao invalida. Faca login novamente.');
-    }
-
-    return response.json();
-  }
 
   useEffect(() => {
     let cancelled = false;
@@ -66,18 +53,7 @@ export function AuthProvider({ children }) {
       isAuthenticated: Boolean(token),
       isAdmin: user?.papel === 'ADMINISTRADOR',
       async login(username, senha) {
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, senha }),
-        });
-
-        const payload = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(payload.message ?? 'Nao foi possivel realizar o login.');
-        }
-
+        const payload = await loginAuth({ username, senha });
         const nextToken = payload.token ?? '';
         if (!nextToken) {
           throw new Error('Resposta de login sem token.');

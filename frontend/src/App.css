@@ -3,12 +3,17 @@
   margin: 0 auto;
   padding: 1rem;
   background: #fff;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .shell {
   border: 1px solid #f1d6de;
   border-radius: 12px;
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar {
@@ -34,7 +39,8 @@
 .shell-body {
   display: grid;
   grid-template-columns: 240px 1fr;
-  min-height: 70vh;
+  flex: 1;
+  min-height: 0;
 }
 
 .sidebar {
@@ -43,6 +49,7 @@
   gap: 0.4rem;
   background: #610127;
   padding: 1rem;
+  overflow: auto;
 }
 
 .sidebar a {
@@ -59,6 +66,28 @@
 
 .content {
   padding: 1.2rem;
+  overflow: auto;
+  min-height: 0;
+}
+
+.page-header-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.page-subtitle {
+  margin-top: -0.3rem;
+  margin-bottom: 1rem;
+  color: #5f4a52;
+}
+
+.link-as-button {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .link-button {
@@ -88,10 +117,13 @@
 }
 
 .login-screen {
-  min-height: 78vh;
+  height: 100%;
+  min-height: 0;
   border: 1px solid #f1d6de;
   border-radius: 12px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .login-topbar {
@@ -115,8 +147,32 @@
   margin: 0;
 }
 
+.user-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.identity-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .topbar-brand.private p {
-  margin: 0.2rem 0 0;
+  margin: 0;
+  opacity: 0.95;
+}
+
+.role-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #ff0040;
+  color: #fff;
 }
 
 .brand-logo {
@@ -131,7 +187,8 @@
 .login-body {
   display: grid;
   grid-template-columns: 260px 1fr;
-  min-height: 70vh;
+  flex: 1;
+  min-height: 0;
   background: #fff;
 }
 
@@ -139,6 +196,7 @@
   background: #610127;
   color: #fff;
   padding: 1.25rem;
+  overflow: auto;
 }
 
 .login-sidebar h2 {
@@ -149,6 +207,8 @@
   padding: 1.25rem;
   display: grid;
   gap: 1rem;
+  overflow: auto;
+  min-height: 0;
 }
 
 .login-card.professional,
@@ -191,6 +251,15 @@
 
 .btn-secondary {
   background: #800538;
+}
+
+.btn-neutral {
+  border: 1px solid #c9a5b2;
+  border-radius: 6px;
+  background: #fff;
+  color: #610127;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
 }
 
 .btn-primary:hover,
@@ -258,10 +327,185 @@
   .login-body {
     grid-template-columns: 1fr;
   }
+
+  .form-grid.polished {
+    grid-template-columns: 1fr;
+  }
 }
 
 .users-table-wrap {
   overflow-x: auto;
+}
+
+.users-table-wrap.refined {
+  border: 1px solid #efd2dc;
+  border-radius: 10px;
+}
+
+.user-form {
+  border: 1px solid #f1d6de;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.user-form.polished {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(97, 1, 39, 0.05);
+}
+
+.form-page {
+  max-width: 920px;
+}
+
+.form-intro {
+  margin-bottom: 0.85rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
+  background: #fcf2f6;
+  border: 1px solid #f0d1dc;
+  color: #5f3b48;
+}
+
+.form-intro p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.user-form h2 {
+  margin-top: 0;
+  color: #610127;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.65rem;
+}
+
+.form-grid.polished {
+  gap: 0.9rem 1rem;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-group label {
+  font-weight: 600;
+  color: #501528;
+}
+
+.form-grid input,
+.form-grid select {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.5rem;
+  min-height: 39px;
+}
+
+.field-hint {
+  color: #6d5a62;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.form-grid input:disabled {
+  background: #f6f4f5;
+  color: #7f6570;
+  border-color: #dfc9d2;
+  cursor: not-allowed;
+}
+
+.checkbox-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.checkbox-inline.toggle {
+  font-weight: 600;
+  color: #5a2335;
+}
+
+.table-toolbar {
+  margin-bottom: 0.8rem;
+}
+
+.table-toolbar.advanced {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.table-search,
+.table-filter {
+  border: 1px solid #dcbac6;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  min-height: 38px;
+}
+
+.table-search {
+  min-width: 260px;
+}
+
+.switch-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #4a1a2a;
+  font-weight: 600;
+}
+
+.switch-control.compact {
+  margin-left: auto;
+}
+
+.switch-control.form-switch {
+  justify-content: space-between;
+  max-width: 260px;
+}
+
+.switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #d5a0b4;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0;
+}
+
+.switch.on {
+  background: #800538;
+}
+
+.switch-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.switch.on .switch-knob {
+  transform: translateX(18px);
 }
 
 .users-table {
@@ -272,7 +516,30 @@
 .users-table th,
 .users-table td {
   text-align: left;
-  padding: 0.65rem;
+  padding: 0.72rem;
   border-bottom: 1px solid #f1d6de;
+}
+
+.users-table thead th {
+  background: #fbf2f5;
+  color: #610127;
+  font-weight: 700;
+}
+
+.users-table tbody tr:hover {
+  background: #fff7fa;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.pagination-wrap {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
 }
 
