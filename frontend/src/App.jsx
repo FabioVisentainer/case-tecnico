@@ -5,15 +5,29 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import UsuariosPage from './pages/UsuariosPage';
+import logoPuc from './assets/LogoPucQuadrado.png';
 import './App.css';
 
+const ROLE_LABELS = {
+  ADMINISTRADOR: 'Administrador(a)',
+  PROFESSOR: 'Professor(a)',
+  ALUNO: 'Aluno(a)',
+};
+
 function PrivateLayout({ user, isAdmin, onLogout }) {
+  const papelLabel = ROLE_LABELS[user?.papel] ?? 'Usuario(a)';
+
   return (
     <div className="shell">
       <header className="topbar">
-        <div>
-          <h2>Case Tecnico</h2>
-          <p>{user?.nome ?? 'Usuário logado'}</p>
+        <div className="topbar-brand private">
+          <img src={logoPuc} alt="PUCPR" className="brand-logo" />
+          <div>
+            <h2>Case Tecnico</h2>
+            <p>
+              {papelLabel} {user?.nome ?? ''}
+            </p>
+          </div>
         </div>
         <button type="button" onClick={onLogout} className="link-button">
           Sair
