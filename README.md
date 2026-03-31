@@ -1,43 +1,152 @@
-# **Case Técnico – Processo Seletivo**
+# Monorepo - Frontend React + Backend Spring Boot
 
-## **Problema**
+Estrutura do projeto:
 
-Desenvolver uma aplicação web para **controlar o uso de espaços de ensino**, permitindo análise da taxa de ocupação.  
-Um ambiente de ensino pode ser uma **sala de aula**, **laboratório** ou **sala de estudos**.  
-A aplicação deve possibilitar o **cadastro de alunos**, que deverão **registrar presença ao entrar e sair do ambiente**.  
-A especificidade do projeto (detalhes adicionais, regras de negócio) fica a critério do candidato.
+- `frontend`: aplicacao React criada com Vite
+- `backend`: API Spring Boot (Java 21 + Gradle)
 
-***
+## Requisitos
 
-## **Pré-requisitos**
+- Java 21
+- Node.js 20+
+- Docker e Docker Compose (opcional, para subir tudo junto)
 
-*   **Não existe sistema atual na instituição** que forneça estrutura inicial.
-*   **Back-end**: Java (Spring) **ou** Node.js.
-*   **Front-end**: React **ou** Angular.
-*   **Armazenamento**: Implementar **um mecanismo de persistência de dados** (tipo de banco ou tecnologia a critério do candidato).
-*   **Funcionalidades obrigatórias**:
-    *   CRUD para cadastro de alunos.
-    *   Registro de entrada e saída dos ambientes de ensino.
-*   **API**:
-    *   Deve existir uma API para comunicação entre front-end e back-end.
-    *   **A API deve implementar autenticação via token e garantir autorização adequada para que apenas usuários autenticados possam acessar e executar operações permitidas.**
+## Backend
 
-***
+API Spring Boot com endpoint:
 
-## **Critérios de Avaliação**
+- `GET /api/hello` -> `{ "message": "Hello from Spring Boot" }`
 
-*   Organização e clareza do código.
-*   Uso de boas práticas (estrutura, padrões, segurança).
-*   Documentação mínima para execução do projeto.
-*   Qualidade da solução proposta (funcionalidade, usabilidade).
-*   Criatividade na definição das regras de negócio.
+Banco de dados MySQL (Hibernate/JPA):
 
-***
+- Banco: `bd_casetecnico`
+- Usuario: `root` (ajuste se necessario)
+- Senha: `C@seTecn!co123`
+- Hibernate: `spring.jpa.hibernate.ddl-auto=update`
 
-## **Como Participar**
+Executar localmente:
 
-1.  **Faça um fork deste repositório.**
-2.  Desenvolva sua solução no repositório criado pelo fork.
-3.  Certifique-se de que o repositório esteja **público**.
-4.  O **último commit** deve ser realizado até **24/11/2025 às 08:00**.
-5.  Envie a URL do seu repositório para o e-mail ana.neneve@pucpr.br até o mesmo prazo do commit.
+```bash
+cd backend
+./gradlew bootRun
+```
+
+No Windows PowerShell:
+
+```powershell
+Set-Location backend
+.\gradlew.bat bootRun
+```
+
+Backend roda na porta `8080`.
+
+### Autenticacao JWT (backend)
+
+- Login publico: `POST /api/auth/login`
+- Endpoint publico: `GET /api/hello`
+- Endpoint protegido: `GET /api/private/hello`
+- Endpoints de usuarios (apenas ADMINISTRADOR):
+  - `POST /api/usuarios`
+  - `GET /api/usuarios`
+
+Usuarios de carga inicial (dataloader):
+
+- 7 alunos: `aluno1` ... `aluno7` (senha `aluno123`)
+- 2 professores: `professor1`, `professor2` (senha `prof123`)
+- 1 administrador: `admin` (senha `admin123`)
+
+Exemplo de login no PowerShell:
+
+```powershell
+$body = @{ nome = "admin"; senha = "admin123" } | ConvertTo-Json
+$auth = Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/auth/login" -ContentType "application/json" -Body $body
+$auth
+```
+
+> O payload de login usa `nome` e `senha`.
+
+Exemplo de chamada protegida:
+
+```powershell
+$token = $auth.token
+Invoke-RestMethod -Uri "http://localhost:8080/api/private/hello" -Headers @{ Authorization = "Bearer $token" }
+```
+
+
+## Frontend
+
+Aplicacao React com React Router:
+
+- `/`: pagina principal que consome `/api/hello`
+- `/about`: pagina de exemplo
+
+O frontend nao usa URL hardcoded do backend; consome `/api/hello` e o Vite redireciona via proxy.
+
+Executar localmente:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+No Windows PowerShell:
+
+```powershell
+Set-Location frontend
+npm install
+npm run dev
+```
+
+Frontend roda na porta `5173`.
+
+## Como testar a tela atual
+
+1. Abra um terminal para o backend e rode:
+
+```powershell
+Set-Location C:\PUCPR\case-tecnico\backend
+.\gradlew.bat bootRun
+```
+
+2. Abra outro terminal para o frontend e rode:
+
+```powershell
+Set-Location C:\PUCPR\case-tecnico\frontend
+npm install
+npm run dev
+```
+
+3. Abra `http://localhost:5173` no navegador.
+4. Na rota `/`, a tela deve exibir a mensagem vinda de `GET /api/hello`.
+5. Se o backend estiver desligado, a tela mostra uma mensagem amigavel de erro.
+
+### Teste rapido da seguranca (API)
+
+```powershell
+$body = @{ username = "user"; password = "password" } | ConvertTo-Json
+$auth = Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/auth/login" -ContentType "application/json" -Body $body
+Invoke-RestMethod -Uri "http://localhost:8080/api/private/hello" -Headers @{ Authorization = "Bearer $($auth.token)" }
+```
+
+## Proxy Vite
+
+Arquivo: `frontend/vite.config.js`
+
+- Proxy de `/api` para `http://localhost:8080` no ambiente local.
+- Em Docker Compose, `VITE_API_PROXY_TARGET` e definido como `http://backend:8080`.
+
+## Docker Compose
+
+Na raiz do projeto:
+
+```bash
+docker compose up --build
+```
+
+Servicos:
+
+- `backend`: porta `8080`
+- `frontend`: porta `5173`
+
+A comunicacao frontend -> backend ocorre pelo proxy `/api`.

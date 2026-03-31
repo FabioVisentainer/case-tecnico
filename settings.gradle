@@ -1,0 +1,6 @@
+rootProject.name = 'case-tecnico'
+
+// Keep backend as a proper Gradle subproject in the monorepo root.
+include(':backend')
+project(':backend').projectDir = file('backend')
+

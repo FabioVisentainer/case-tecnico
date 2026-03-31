@@ -1,0 +1,26 @@
+.app-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.message {
+  color: #0f766e;
+}
+
+.error {
+  color: #b91c1c;
+}
+

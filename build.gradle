@@ -1,0 +1,11 @@
+plugins {
+    id 'base'
+}
+
+// Root aggregator build to make IntelliJ import the monorepo as a Gradle project.
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
