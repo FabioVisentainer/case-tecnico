@@ -122,7 +122,7 @@ export default function UsuarioForm({
               <span className="switch-knob" />
             </button>
           </label>
-          <small className="field-hint">Usuarios inativos nao conseguem autenticar no sistema.</small>
+          <small className="field-hint">Usuários inativos não conseguem autenticar no sistema.</small>
         </div>
       </div>
 

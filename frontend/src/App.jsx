@@ -43,7 +43,7 @@ function PrivateLayout({ user, isAdmin, onLogout }) {
             Inicio
           </NavLink>
           <NavLink to="/about">Sobre</NavLink>
-          {isAdmin ? <NavLink to="/usuarios">Cadastro de Usuarios</NavLink> : null}
+          {isAdmin ? <NavLink to="/usuarios">Cadastro de Usuários</NavLink> : null}
         </aside>
 
         <main className="content">
@@ -58,7 +58,7 @@ export default function App() {
   const { isAuthenticated, isAdmin, isLoadingUser, logout, user } = useAuth();
 
   if (isAuthenticated && isLoadingUser) {
-    return <div className="app-container">Carregando sessao...</div>;
+    return <div className="app-container">Carregando sessão...</div>;
   }
 
   return (

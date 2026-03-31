@@ -19,7 +19,7 @@ export default function HomePage() {
         }
       } catch (loadError) {
         if (active) {
-          setError('Nao foi possivel conectar ao backend. Tente novamente em instantes.');
+          setError('Não foi possível conectar ao backend. Tente novamente em instantes.');
           setMessage('');
         }
       }
@@ -34,8 +34,8 @@ export default function HomePage() {
 
   return (
     <section>
-      <h1>Pagina Principal</h1>
-      <p>Voce esta autenticado.</p>
+      <h1>Página Principal</h1>
+      <p>Você está autenticado.</p>
       {error ? <p className="error">{error}</p> : <p className="message">{message}</p>}
     </section>
   );

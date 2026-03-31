@@ -61,13 +61,13 @@ export default function UsuariosEditPage() {
 
   return (
     <section className="form-page">
-      <h1>Editar usuario</h1>
-      <p className="page-subtitle">Atualize os dados e salve as alteracoes para aplicar no sistema.</p>
+      <h1>Editar usuário</h1>
+      <p className="page-subtitle">Atualize os dados e salve as alterações para aplicar no sistema.</p>
       <UsuarioForm
         initialData={initialData}
         onSubmit={handleUpdate}
         onCancel={() => navigate('/usuarios')}
-        submitLabel="Salvar alteracoes"
+        submitLabel="Salvar alterações"
         isSubmitting={isSubmitting}
         isEdit
       />

@@ -85,7 +85,7 @@ export default function LoginPage() {
         <div className="login-content">
           <div className="login-card professional">
             <h2>Entrar</h2>
-            <p className="hint">Use suas credenciais ou escolha um card de usuario de teste.</p>
+            <p className="hint">Use suas credenciais ou escolha um card de usuário de teste.</p>
 
             <form onSubmit={handleLogin}>
               <label htmlFor="username">Username</label>
@@ -135,7 +135,7 @@ export default function LoginPage() {
                         onClick={(event) => handleLogin(event, user)}
                         disabled={isLoading}
                       >
-                        Entrar com este usuario
+                        Entrar com este usuário
                       </button>
                     </article>
                   ))}

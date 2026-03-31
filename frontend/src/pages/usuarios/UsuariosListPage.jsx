@@ -52,7 +52,7 @@ export default function UsuariosListPage() {
       });
       setError('');
     } catch (loadError) {
-      const message = loadError.message || 'Falha ao carregar usuarios.';
+      const message = loadError.message || 'Falha ao carregar usuários.';
       setError(message);
       toast.error(message);
     } finally {
@@ -69,7 +69,7 @@ export default function UsuariosListPage() {
     try {
       await updateUsuarioStatus({ token, id: usuario.id, ativo: nextStatus });
 
-      toast.success(nextStatus ? 'Usuario reativado com sucesso.' : 'Usuario inativado com sucesso.');
+      toast.success(nextStatus ? 'Usuário reativado com sucesso.' : 'Usuário inativado com sucesso.');
       await loadUsuarios();
     } catch (statusError) {
       toast.error(statusError.message || 'Falha ao alterar status.');
@@ -116,7 +116,7 @@ export default function UsuariosListPage() {
               setPage(0);
             }}
             aria-pressed={mostrarInativos}
-            aria-label="Exibir usuarios inativos"
+            aria-label="Exibir usuários inativos"
           >
             <span className="switch-knob" />
           </button>
@@ -129,18 +129,18 @@ export default function UsuariosListPage() {
           <table className="users-table">
             <thead>
               <tr>
-                <th>Usuario</th>
+                <th>Usuário</th>
                 <th>Username</th>
                 <th>Ativo</th>
-                <th>Acoes</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
               {usuarios.map((usuario) => (
                 <tr key={usuario.id}>
-                  <td>{`${ROLE_LABELS[usuario.papel] ?? 'Usuario(a)'}: ${usuario.nome}`}</td>
+                  <td>{`${ROLE_LABELS[usuario.papel] ?? 'Usuário(a)'}: ${usuario.nome}`}</td>
                   <td>{usuario.username}</td>
-                  <td>{usuario.ativo ? 'Sim' : 'Nao'}</td>
+                  <td>{usuario.ativo ? 'Sim' : 'Não'}</td>
                   <td className="table-actions">
                     <button type="button" className="btn-secondary" onClick={() => navigate(`/usuarios/${usuario.id}/editar`)}>
                       Editar
@@ -161,10 +161,10 @@ export default function UsuariosListPage() {
           Anterior
         </button>
         <span>
-          Pagina {page + 1} de {Math.max(meta.totalPages, 1)} - {meta.totalElements} registros
+          Página {page + 1} de {Math.max(meta.totalPages, 1)} - {meta.totalElements} registros
         </span>
         <button type="button" className="btn-neutral" onClick={() => setPage((prev) => prev + 1)} disabled={meta.last || isLoading}>
-          Proxima
+          Próxima
         </button>
       </div>
     </section>

@@ -26,13 +26,13 @@ export default function UsuariosCreatePage() {
 
   return (
     <section className="form-page">
-      <h1>Criar usuario</h1>
-      <p className="page-subtitle">Preencha os campos abaixo para cadastrar um novo aluno ou professor.</p>
+      <h1>Criar usuário</h1>
+      <p className="page-subtitle">Preencha os campos abaixo para cadastrar um novo aluno(a) ou professor(a).</p>
       <UsuarioForm
         initialData={DEFAULT_USUARIO_FORM}
         onSubmit={handleCreate}
         onCancel={() => navigate('/usuarios')}
-        submitLabel="Cadastrar usuario"
+        submitLabel="Cadastrar usuário"
         isSubmitting={isSubmitting}
         isEdit={false}
       />
