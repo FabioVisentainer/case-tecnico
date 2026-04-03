@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-import { listUsuarios, updateUsuarioStatus } from '../../services/usuarios/usuariosService';
+import { getUsuarioById, listUsuarios, updateUsuarioStatus } from '../../services/usuarios/usuariosService';
+import './UsuariosPage.css';
 
 const ROLE_LABELS = {
   ADMINISTRADOR: 'Administrador(a)',
@@ -23,6 +24,7 @@ export default function UsuariosListPage() {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const [meta, setMeta] = useState({ totalPages: 0, totalElements: 0, first: true, last: true });
+  const [localizacaoModal, setLocalizacaoModal] = useState({ isOpen: false, isLoading: false, data: null, error: '' });
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -76,16 +78,49 @@ export default function UsuariosListPage() {
     }
   }
 
+  async function handleLocalizar(usuario) {
+    setLocalizacaoModal({ isOpen: true, isLoading: true, data: null, error: '' });
+    try {
+      const detalhe = await getUsuarioById({ token, id: usuario.id });
+      setLocalizacaoModal({ isOpen: true, isLoading: false, data: detalhe, error: '' });
+    } catch (error) {
+      setLocalizacaoModal({ isOpen: true, isLoading: false, data: null, error: error.message || 'Nao foi possivel localizar o usuario.' });
+    }
+  }
+
+  function closeLocalizacaoModal() {
+    setLocalizacaoModal({ isOpen: false, isLoading: false, data: null, error: '' });
+  }
+
+  async function handleCopiarLocalizacao() {
+    const data = localizacaoModal.data;
+    if (!data) return;
+
+    const texto = data.emSala
+      ? `${data.nome} - ${data.blocoAtual} / ${data.andarAtual} / ${data.salaAtual}`
+      : `${data.nome} - Fora da universidade`;
+
+    try {
+      await navigator.clipboard.writeText(texto);
+      toast.success('Localização copiada.');
+    } catch {
+      toast.error('Não foi possível copiar a localização.');
+    }
+  }
+
   return (
-    <section>
-      <div className="page-header-inline">
-        <h1>Usuários</h1>
-        <Link to="/usuarios/criar" className="btn-secondary link-as-button">
-          Criar usuário
+    <section className="usuarios-page">
+      <div className="usuarios-header page-header-inline">
+        <div>
+          <h1>Usuários</h1>
+          <p className="page-subtitle">Gerencie cadastro, perfil e status dos usuários.</p>
+        </div>
+        <Link to="/usuarios/criar" className="btn-primary link-as-button">
+          + Novo usuário
         </Link>
       </div>
 
-      <div className="table-toolbar advanced">
+      <div className="usuarios-toolbar table-toolbar advanced">
         <input
           className="table-search"
           value={search}
@@ -125,7 +160,7 @@ export default function UsuariosListPage() {
 
       {error ? <p className="error">{error}</p> : null}
       {!error ? (
-        <div className="users-table-wrap refined">
+        <div className="usuarios-table-card users-table-wrap refined">
           <table className="users-table">
             <thead>
               <tr>
@@ -145,6 +180,9 @@ export default function UsuariosListPage() {
                     <button type="button" className="btn-secondary" onClick={() => navigate(`/usuarios/${usuario.id}/editar`)}>
                       Editar
                     </button>
+                    <button type="button" className="btn-neutral" onClick={() => handleLocalizar(usuario)}>
+                      Localizar
+                    </button>
                     <button type="button" className="btn-neutral" onClick={() => handleToggleStatus(usuario)}>
                       {usuario.ativo ? 'Inativar' : 'Reativar'}
                     </button>
@@ -156,7 +194,7 @@ export default function UsuariosListPage() {
         </div>
       ) : null}
 
-      <div className="pagination-wrap">
+      <div className="usuarios-pagination pagination-wrap">
         <button type="button" className="btn-neutral" onClick={() => setPage((prev) => Math.max(prev - 1, 0))} disabled={meta.first || isLoading}>
           Anterior
         </button>
@@ -167,6 +205,44 @@ export default function UsuariosListPage() {
           Próxima
         </button>
       </div>
+
+      {localizacaoModal.isOpen ? (
+        <div className="usuarios-modal-overlay" onClick={closeLocalizacaoModal}>
+          <div className="usuarios-modal-content" onClick={(event) => event.stopPropagation()}>
+            <div className="usuarios-modal-header">
+              <h2>Localizar usuário</h2>
+              <button type="button" className="modal-close" onClick={closeLocalizacaoModal}>×</button>
+            </div>
+
+            <div className="usuarios-modal-body">
+              {localizacaoModal.isLoading ? <p>Localizando usuário...</p> : null}
+              {!localizacaoModal.isLoading && localizacaoModal.error ? <p>{localizacaoModal.error}</p> : null}
+              {!localizacaoModal.isLoading && !localizacaoModal.error && localizacaoModal.data ? (
+                <>
+                  <p><strong>Nome:</strong> {localizacaoModal.data.nome}</p>
+                  <p><strong>Papel:</strong> {ROLE_LABELS[localizacaoModal.data.papel] ?? 'Usuário(a)'}</p>
+                  {localizacaoModal.data.emSala ? (
+                    <>
+                      <p className="status-localizacao em-sala"><strong>Status:</strong> Em sala</p>
+                      <p><strong>Local:</strong> {localizacaoModal.data.blocoAtual} / {localizacaoModal.data.andarAtual} / {localizacaoModal.data.salaAtual}</p>
+                      <p><strong>Entrada:</strong> {localizacaoModal.data.entradaAtual ? new Date(localizacaoModal.data.entradaAtual).toLocaleString('pt-BR') : '-'}</p>
+                    </>
+                  ) : (
+                    <p className="status-localizacao fora"><strong>Status:</strong> Professor/aluno não se encontra na universidade</p>
+                  )}
+                </>
+              ) : null}
+            </div>
+
+            <div className="usuarios-modal-footer">
+              {!localizacaoModal.isLoading && !localizacaoModal.error && localizacaoModal.data ? (
+                <button type="button" className="btn-secondary" onClick={handleCopiarLocalizacao}>Copiar localização</button>
+              ) : null}
+              <button type="button" className="btn-neutral" onClick={closeLocalizacaoModal}>Fechar</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

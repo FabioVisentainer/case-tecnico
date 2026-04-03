@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { createUsuario } from '../../services/usuarios/usuariosService';
 import UsuarioForm, { DEFAULT_USUARIO_FORM } from './UsuarioForm';
+import './UsuariosPage.css';
 
 export default function UsuariosCreatePage() {
   const { token } = useAuth();
@@ -25,9 +26,11 @@ export default function UsuariosCreatePage() {
   }
 
   return (
-    <section className="form-page">
-      <h1>Criar usuário</h1>
-      <p className="page-subtitle">Preencha os campos abaixo para cadastrar um novo aluno(a) ou professor(a).</p>
+    <section className="usuarios-page form-page usuarios-form-page">
+      <div className="usuarios-header">
+        <h1>Criar usuário</h1>
+        <p className="page-subtitle">Preencha os campos abaixo para cadastrar um novo aluno(a) ou professor(a).</p>
+      </div>
       <UsuarioForm
         initialData={DEFAULT_USUARIO_FORM}
         onSubmit={handleCreate}

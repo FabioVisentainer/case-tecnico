@@ -1,0 +1,6 @@
+.dashboard-geral-page {
+  max-width: 1200px;
+  display: grid;
+  gap: 1rem;
+}
+

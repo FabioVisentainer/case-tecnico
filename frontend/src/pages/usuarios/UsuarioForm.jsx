@@ -127,7 +127,7 @@ export default function UsuarioForm({
       </div>
 
       <div className="form-actions">
-        <button type="submit" className="btn-secondary" disabled={isSubmitting}>
+        <button type="submit" className="btn-primary" disabled={isSubmitting}>
           {isSubmitting ? 'Salvando...' : submitLabel}
         </button>
         {onCancel ? (

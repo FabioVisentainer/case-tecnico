@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { getUsuarioById, updateUsuario } from '../../services/usuarios/usuariosService';
 import UsuarioForm from './UsuarioForm';
+import './UsuariosPage.css';
 
 export default function UsuariosEditPage() {
   const { token } = useAuth();
@@ -56,13 +57,15 @@ export default function UsuariosEditPage() {
   }
 
   if (!initialData) {
-    return <section className="form-page">Carregando usuario...</section>;
+    return <section className="usuarios-page form-page usuarios-form-page">Carregando usuario...</section>;
   }
 
   return (
-    <section className="form-page">
-      <h1>Editar usuário</h1>
-      <p className="page-subtitle">Atualize os dados e salve as alterações para aplicar no sistema.</p>
+    <section className="usuarios-page form-page usuarios-form-page">
+      <div className="usuarios-header">
+        <h1>Editar usuário</h1>
+        <p className="page-subtitle">Atualize os dados e salve as alterações para aplicar no sistema.</p>
+      </div>
       <UsuarioForm
         initialData={initialData}
         onSubmit={handleUpdate}

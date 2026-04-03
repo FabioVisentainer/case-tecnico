@@ -1,0 +1,161 @@
+.checkin-page {
+  max-width: 1200px;
+}
+
+.checkin-option-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.option-card {
+  text-align: left;
+  border: 1px solid #d9e8f8;
+  border-radius: 10px;
+  background: #fff;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.option-card p {
+  margin: 0;
+  color: #566;
+  font-size: 0.92rem;
+}
+
+.option-card:hover,
+.option-card.active {
+  border-color: #9cc4ef;
+  background: #f7fbff;
+}
+
+.checkin-current-card {
+  border: 1px solid #d9e8f8;
+  border-radius: 10px;
+  background: #f7fbff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.checkin-current-actions {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.alunos-presentes-list {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #d8e6f7;
+  background: #fff;
+}
+
+.alunos-search {
+  width: 100%;
+  margin-bottom: 0.7rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #d0deee;
+  border-radius: 8px;
+  font-size: 0.92rem;
+}
+
+.alunos-search:focus {
+  outline: none;
+  border-color: #8cb6e6;
+  box-shadow: 0 0 0 3px rgba(140, 182, 230, 0.15);
+}
+
+.alunos-presentes-list ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.alunos-presentes-list li {
+  margin-bottom: 0.25rem;
+}
+
+.checkin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+}
+
+.checkin-modal-content {
+  width: min(92vw, 540px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.25);
+}
+
+.checkin-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem 0.6rem;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.checkin-modal-header h3 {
+  margin: 0;
+}
+
+.checkin-toolbar {
+  margin-bottom: 1rem;
+}
+
+.navigate-wrap {
+  margin-top: 1rem;
+}
+
+.navigate-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.navigate-header h3 {
+  margin: 0;
+}
+
+.checkin-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.checkin-room-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #fff;
+  padding: 1rem;
+}
+
+.checkin-room-card h4 {
+  margin: 0 0 0.45rem;
+}
+
+.checkin-room-card p {
+  margin: 0.25rem 0;
+  color: #4a4a4a;
+}
+
+@media (max-width: 900px) {
+  .checkin-option-cards {
+    grid-template-columns: 1fr;
+  }
+}
+

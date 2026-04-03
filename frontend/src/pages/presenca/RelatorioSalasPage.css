@@ -1,0 +1,140 @@
+.relatorio-salas-page {
+  max-width: 1200px;
+}
+
+.dashboard-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.kpi-card {
+  border: 1px solid #d7e7f8;
+  border-radius: 10px;
+  background: #f8fbff;
+  padding: 0.9rem;
+}
+
+.kpi-card h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  color: #50657f;
+}
+
+.kpi-card p {
+  margin: 0;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #1e4f8f;
+}
+
+.dashboard-grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.panel-card {
+  border: 1px solid #e3ecf6;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.9rem;
+}
+
+.panel-card h3 {
+  margin: 0 0 0.75rem;
+}
+
+.bars-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.bar-item {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.bar-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bar-track {
+  height: 10px;
+  background: #edf2f7;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a90e2, #2f6fb9);
+}
+
+.bar-item small {
+  color: #6f8094;
+}
+
+.relatorio-blocos-wrap {
+  display: grid;
+  gap: 1rem;
+}
+
+.relatorio-bloco-card {
+  border: 1px solid #d9e8f8;
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem;
+}
+
+.relatorio-bloco-card > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.relatorio-bloco-card h3 {
+  margin: 0;
+}
+
+.ocupacao-badge {
+  background: #f0f7ff;
+  color: #14508c;
+  border: 1px solid #cfe2f7;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-weight: 700;
+}
+
+.relatorio-andar {
+  border-top: 1px dashed #e5e5e5;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.relatorio-andar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+  color: #2a2a2a;
+}
+
+@media (max-width: 1000px) {
+  .dashboard-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-grid-two {
+    grid-template-columns: 1fr;
+  }
+}
+

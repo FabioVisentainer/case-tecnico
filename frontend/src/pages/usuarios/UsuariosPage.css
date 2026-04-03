@@ -1,0 +1,130 @@
+.usuarios-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.usuarios-header {
+  margin-bottom: 1rem;
+}
+
+.usuarios-header h1 {
+  margin-bottom: 0.25rem;
+}
+
+.usuarios-page .page-subtitle {
+  margin-top: 0;
+  color: #666;
+}
+
+.usuarios-toolbar {
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.usuarios-table-card {
+  margin-top: 0.75rem;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.usuarios-page .users-table thead th {
+  background: #f0f7ff;
+  color: #1e4f8f;
+}
+
+.usuarios-page .users-table tbody tr:hover {
+  background: #f7fbff;
+}
+
+.usuarios-pagination {
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.usuarios-form-page .user-form {
+  border: 1px solid #dbe9f9;
+  border-top: 4px solid #007bff;
+}
+
+.usuarios-form-page .form-intro {
+  background: #f4f9ff;
+  border-color: #dbe9f9;
+  color: #365b7a;
+}
+
+.usuarios-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6000;
+}
+
+.usuarios-modal-content {
+  width: min(92vw, 560px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.25);
+}
+
+.usuarios-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.usuarios-modal-header h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.usuarios-modal-body {
+  padding: 1rem 1.2rem;
+}
+
+.usuarios-modal-body p {
+  margin: 0.5rem 0;
+}
+
+.usuarios-modal-footer {
+  padding: 0 1.2rem 1rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.status-localizacao {
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+}
+
+.status-localizacao.em-sala {
+  background: #ebf8ef;
+  color: #1f7a3f;
+}
+
+.status-localizacao.fora {
+  background: #fdecec;
+  color: #a12b2b;
+}
+
+@media (max-width: 900px) {
+  .usuarios-header.page-header-inline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .usuarios-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
