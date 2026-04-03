@@ -10,20 +10,20 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UsuarioAtualizacaoRequest(
-        @NotBlank(message = "Nome obrigatorio.")
-        @Size(max = 120, message = "Nome deve ter no maximo 120 caracteres.")
+        @NotBlank(message = "Nome obrigatório.")
+        @Size(max = 120, message = "Nome deve ter no máximo 120 caracteres.")
         String nome,
 
-        @NotBlank(message = "Username obrigatorio.")
-        @Size(max = 40, message = "Username deve ter no maximo 40 caracteres.")
-        @Pattern(regexp = "^[A-Za-z0-9._-]+$", message = "Username invalido. Nao use espacos.")
+        @NotBlank(message = "Username obrigatório.")
+        @Size(max = 40, message = "Username deve ter no máximo 40 caracteres.")
+        @Pattern(regexp = "^[A-Za-z0-9._-]+$", message = "Username inválido. Não use espaços.")
         String username,
 
-        @NotBlank(message = "CPF obrigatorio.")
-        @CPF(message = "CPF invalido.")
+        @NotBlank(message = "CPF obrigatório.")
+        @CPF(message = "CPF inválido.")
         String cpf,
 
-        @NotNull(message = "Papel obrigatorio.")
+        @NotNull(message = "Papel obrigatório.")
         EnumPapelUsuario papel,
 
         @Size(min = 4, message = "Senha deve ter no minimo 4 caracteres.")

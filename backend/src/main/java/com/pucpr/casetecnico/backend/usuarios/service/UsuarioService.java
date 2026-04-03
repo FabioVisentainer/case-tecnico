@@ -44,7 +44,7 @@ public class UsuarioService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
 
         return User.withUsername(usuario.getUsername())
                 .password(usuario.getSenha())
@@ -59,15 +59,15 @@ public class UsuarioService implements UserDetailsService {
         String cpfNormalizado = normalizarCpf(request.cpf());
 
         if (request.papel() == EnumPapelUsuario.ADMINISTRADOR) {
-            throw new IllegalArgumentException("Administrador nao pode ser criado por este endpoint.");
+            throw new IllegalArgumentException("Administrador não pode ser criado por este endpoint.");
         }
 
         if (usuarioRepository.existsByUsername(usernameNormalizado)) {
-            throw new IllegalArgumentException("Ja existe usuario com esse username.");
+            throw new IllegalArgumentException("Já existe usuário com esse username.");
         }
 
         if (usuarioRepository.existsByCpf(cpfNormalizado)) {
-            throw new IllegalArgumentException("Ja existe usuario com esse CPF.");
+            throw new IllegalArgumentException("Já existe usuário com esse CPF.");
         }
 
         Usuario usuario = Usuario.builder()
@@ -136,11 +136,11 @@ public class UsuarioService implements UserDetailsService {
         String cpfNormalizado = normalizarCpf(request.cpf());
 
         if (!usernameNormalizado.equals(usuario.getUsername()) || !cpfNormalizado.equals(usuario.getCpf())) {
-            throw new IllegalArgumentException("CPF e username nao podem ser alterados.");
+            throw new IllegalArgumentException("CPF e username não podem ser alterados.");
         }
 
         if (request.papel() == EnumPapelUsuario.ADMINISTRADOR) {
-            throw new IllegalArgumentException("Administrador nao pode ser criado por este endpoint.");
+            throw new IllegalArgumentException("Administrador não pode ser criado por este endpoint.");
         }
 
         usuario.setNome(nomeNormalizado);
@@ -172,12 +172,12 @@ public class UsuarioService implements UserDetailsService {
 
     public Usuario buscarPorUsername(String username) {
         return usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
     }
 
     private Usuario buscarPorId(Long id) {
         return usuarioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado."));
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
     }
 
     public void criarSeNaoExistir(String nome, String username, String cpf, EnumPapelUsuario papel, String senha, boolean ativo) {
@@ -210,7 +210,7 @@ public class UsuarioService implements UserDetailsService {
     private String normalizarUsername(String username) {
         String usernameNormalizado = username.trim().toLowerCase();
         if (!USERNAME_PATTERN.matcher(usernameNormalizado).matches()) {
-            throw new IllegalArgumentException("Username invalido. Use apenas letras minusculas, números, ponto, underline ou hífen, sem espaços.");
+            throw new IllegalArgumentException("Username inválido. Use apenas letras minúsculas, números, ponto, underscore ou hífen, sem espaços.");
         }
         return usernameNormalizado;
     }
@@ -218,7 +218,7 @@ public class UsuarioService implements UserDetailsService {
     private String normalizarCpf(String cpf) {
         String cpfNormalizado = cpf.replaceAll("\\D", "");
         if (cpfNormalizado.length() != 11) {
-            throw new IllegalArgumentException("CPF invalido.");
+            throw new IllegalArgumentException("CPF inválido.");
         }
         return cpfNormalizado;
     }

@@ -21,7 +21,7 @@ public record UsuarioCadastroRequest(
         String username,
 
         @NotBlank(message = "CPF obrigatório.")
-        @CPF(message = "CPF invalido.")
+        @CPF(message = "CPF inválido.")
         String cpf,
 
         @NotNull(message = "Papel obrigatório.")
