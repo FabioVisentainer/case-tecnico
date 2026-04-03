@@ -44,7 +44,7 @@ public class AuthController {
             return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
         } catch (DisabledException exception) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Usuario inativo. Contate um administrador."));
+                    .body(Map.of("message", "Usuário inativo. Contate um administrador."));
         } catch (BadCredentialsException exception) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Credenciais invalidas"));
