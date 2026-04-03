@@ -1,114 +1,141 @@
-# Monorepo - Frontend React + Backend Spring Boot
+# Case Técnico - Gestão de Espaços e Ocupação do Campus
 
-Estrutura do projeto:
+Aplicação em monorepo para controlar o uso de espaços de ensino, registrar presença em salas e acompanhar a ocupação do campus em tempo real.
 
-- `frontend`: aplicacao React criada com Vite
-- `backend`: API Spring Boot (Java 21 + Gradle)
+O projeto atende ao enunciado do case com:
 
-## Requisitos
+- autenticação via token
+- autorização por perfis de usuário
+- cadastro de usuários
+- registro de entrada e saída em ambientes de ensino
+- dashboards de ocupação
+- persistência em MySQL com Hibernate/JPA
+
+## Estrutura do monorepo
+
+- `frontend/` → aplicação React criada com Vite
+- `backend/` → API Spring Boot em Java 21 com Gradle
+
+## Stack utilizada
+
+### Frontend
+- React
+- Vite
+- React Router
+- fetch para integração com a API
+
+### Backend
+- Java 21
+- Spring Boot
+- Spring Web
+- Spring Security
+- Spring Data JPA / Hibernate
+- Spring Validation
+- JWT
+- MySQL
+- Lombok
+- Springdoc OpenAPI / Swagger
+
+## Requisitos para executar
 
 - Java 21
 - Node.js 20+
-- Docker e Docker Compose (opcional, para subir tudo junto)
+- npm
+- MySQL 8+
+- Docker e Docker Compose, se quiser subir tudo junto
 
-## Backend
+## Banco de dados
 
-API Spring Boot com endpoint:
+O backend utiliza MySQL com o banco:
 
-- `GET /api/hello` -> `{ "message": "Hello from Spring Boot" }`
+- `bd_casetecnico`
 
-Banco de dados MySQL (Hibernate/JPA):
+As configurações de banco e JWT são lidas por variáveis de ambiente:
 
-- Configuracao por perfis: `dev` (local) e `docker`
-- Banco/usuario/senha via variaveis de ambiente (`DB_*`)
-- Hibernate: `spring.jpa.hibernate.ddl-auto=update`
+- `DB_HOST`
+- `DB_PORT`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`
+- `APP_JWT_SECRET`
+- `APP_JWT_EXPIRATION_MS`
 
-Executar localmente:
+O Hibernate está configurado para gerenciar as tabelas automaticamente conforme a estratégia definida no projeto.
 
-```bash
-cd backend
-./gradlew bootRun
-```
+## Perfis da aplicação
 
-No Windows PowerShell:
+O backend trabalha com perfis de execução:
+
+- `dev` → execução local
+- `docker` → execução no Docker Compose
+
+O perfil ativo é definido por `SPRING_PROFILES_ACTIVE`.
+
+## Funcionalidades principais
+
+### Autenticação e autorização
+- login com JWT
+- acesso por perfil:
+  - `ADMINISTRADOR`
+  - `PROFESSOR`
+  - `ALUNO`
+- endpoints públicos e protegidos conforme regra de negócio
+
+### Administração
+- cadastro, edição, listagem e inativação de usuários
+- gestão de blocos, andares e salas
+- dashboards para acompanhamento da ocupação
+
+### Presença
+- check-in em salas
+- checkout de sala atual
+- consulta da presença atual
+- consulta de alunos presentes na mesma sala para professor
+
+## Swagger / OpenAPI
+
+A documentação da API está disponível no backend via Swagger.
+
+Endpoints:
+
+- `http://localhost:8080/swagger-ui.html`
+- `http://localhost:8080/v3/api-docs`
+
+## Como executar localmente
+
+### 1. Backend
+
+Configure as variáveis de ambiente antes de subir o backend.
+
+#### Windows PowerShell
 
 ```powershell
-Set-Location backend
+Set-Location C:\PUCPR\case-tecnico\backend
 Set-Item Env:DB_HOST localhost
 Set-Item Env:DB_PORT 3306
 Set-Item Env:DB_NAME bd_casetecnico
 Set-Item Env:DB_USER root
-Set-Item Env:DB_PASSWORD "sua-senha"
-Set-Item Env:APP_JWT_SECRET "uma-chave-jwt-bem-grande"
+Set-Item Env:DB_PASSWORD "C@seTecn!co123"
+Set-Item Env:APP_JWT_SECRET "sua-chave-jwt-aqui"
 .\gradlew.bat bootRun
 ```
 
-Backend roda na porta `8080`.
+#### Linux / macOS
 
-### Autenticacao JWT (backend)
-
-- Login publico: `POST /api/auth/login`
-- Endpoint publico: `GET /api/hello`
-- Endpoint protegido: `GET /api/private/hello`
-- Endpoints de usuarios (apenas ADMINISTRADOR):
-  - `POST /api/usuarios`
-  - `GET /api/usuarios`
-
-Usuarios de carga inicial (dataloader):
-
-- 7 alunos: `aluno1` ... `aluno7` (senha `aluno123`)
-- 2 professores: `professor1`, `professor2` (senha `prof123`)
-- 1 administrador: `admin` (senha `admin123`)
-
-Exemplo de login no PowerShell:
-
-```powershell
-$body = @{ username = "admin"; senha = "admin123" } | ConvertTo-Json
-$auth = Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/auth/login" -ContentType "application/json" -Body $body
-$auth
+```bash
+cd backend
+export DB_HOST=localhost
+export DB_PORT=3306
+export DB_NAME=bd_casetecnico
+export DB_USER=root
+export DB_PASSWORD='C@seTecn!co123'
+export APP_JWT_SECRET='sua-chave-jwt-aqui'
+./gradlew bootRun
 ```
 
-> O payload de login usa `username` e `senha`.
+O backend sobe na porta `8080`.
 
-Cadastro de usuario (ADMIN):
-
-```json
-{
-  "nome": "  Maria   da   Silva  ",
-  "username": "maria.silva",
-  "cpf": "123.456.789-09",
-  "papel": "ALUNO",
-  "senha": "1234",
-  "ativo": true
-}
-```
-
-- `nome`: trim + colapso de espacos internos
-- `username`: unico, sem espacos, apenas `[a-z0-9._-]`
-- `cpf`: unico e validado (aceita formatado ou so digitos)
-
-Exemplo de chamada protegida:
-
-```powershell
-$token = $auth.token
-Invoke-RestMethod -Uri "http://localhost:8080/api/private/hello" -Headers @{ Authorization = "Bearer $token" }
-```
-
-
-## Frontend
-
-Aplicacao React com React Router:
-
-- `/login`: tela de autenticacao
-- `/`: pagina principal protegida que consome `/api/private/hello`
-- `/about`: pagina de exemplo
-
-Ao acessar o frontend sem autenticacao, o usuario e redirecionado para `/login`.
-Na tela de login ha uma lista de usuarios pre-cadastrados para entrar com um clique.
-
-O frontend nao usa URL hardcoded do backend; consome `/api/hello` e o Vite redireciona via proxy.
-
-Executar localmente:
+### 2. Frontend
 
 ```bash
 cd frontend
@@ -116,65 +143,155 @@ npm install
 npm run dev
 ```
 
-No Windows PowerShell:
+O frontend sobe na porta `5173`.
+
+## Como testar
+
+### 1. Testar o backend
+
+Com o backend rodando, acesse no navegador ou via cliente HTTP:
+
+- `GET http://localhost:8080/api/hello`
+- `GET http://localhost:8080/swagger-ui.html`
+
+Exemplo no PowerShell:
 
 ```powershell
-Set-Location frontend
-npm install
-npm run dev
+Invoke-RestMethod -Uri "http://localhost:8080/api/hello"
 ```
 
-Frontend roda na porta `5173`.
+### 2. Testar o login
 
-## Como testar a tela atual
+Faça login com um usuário de teste para obter o token JWT.
 
-1. Abra um terminal para o backend e rode:
-
-```powershell
-Set-Location C:\PUCPR\case-tecnico\backend
-.\gradlew.bat bootRun
-```
-
-2. Abra outro terminal para o frontend e rode:
+Exemplo:
 
 ```powershell
-Set-Location C:\PUCPR\case-tecnico\frontend
-npm install
-npm run dev
-```
-
-3. Abra `http://localhost:5173` no navegador.
-4. Na rota `/`, a tela deve exibir a mensagem vinda de `GET /api/hello`.
-5. Se o backend estiver desligado, a tela mostra uma mensagem amigavel de erro.
-
-### Teste rapido da seguranca (API)
-
-```powershell
-$body = @{ username = "user"; password = "password" } | ConvertTo-Json
+$body = @{ username = "admin"; senha = "admin123" } | ConvertTo-Json
 $auth = Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/auth/login" -ContentType "application/json" -Body $body
+$auth
+```
+
+### 3. Testar um endpoint protegido
+
+Use o token retornado no login:
+
+```powershell
 Invoke-RestMethod -Uri "http://localhost:8080/api/private/hello" -Headers @{ Authorization = "Bearer $($auth.token)" }
 ```
 
-## Proxy Vite
+### 4. Testar o frontend
 
-Arquivo: `frontend/vite.config.js`
+Com o frontend rodando, abra:
 
-- Proxy de `/api` para `http://localhost:8080` no ambiente local.
-- Em Docker Compose, `VITE_API_PROXY_TARGET` e definido como `http://backend:8080`.
+- `http://localhost:5173`
 
-## Docker Compose
+Valide se:
 
-Na raiz do projeto:
+- a página carrega corretamente
+- o login funciona
+- o redirecionamento por perfil ocorre corretamente
+- os cards e dashboards aparecem conforme o usuário autenticado
+
+### 5. Testar via Docker
+
+Após subir com `docker compose up --build`, valide:
+
+- frontend: `http://localhost:5173`
+- backend: `http://localhost:8080`
+- swagger: `http://localhost:8080/swagger-ui.html`
+
+### 6. Testar o banco de dados
+
+Verifique se o MySQL criou o banco `bd_casetecnico` e se as tabelas foram geradas pelo Hibernate ao iniciar a aplicação.
+
+## Como executar com Docker Compose
+
+Na raiz do projeto, defina as variáveis de ambiente e suba os serviços:
+
+#### Windows PowerShell
 
 ```powershell
-Copy-Item .env.example .env
-# ajuste DB_PASSWORD e APP_JWT_SECRET no arquivo .env
+Set-Location C:\PUCPR\case-tecnico
+Set-Item Env:DB_PASSWORD "C@seTecn!co123"
+Set-Item Env:APP_JWT_SECRET "sua-chave-jwt-aqui"
 docker compose up --build
 ```
 
-Servicos:
+#### Linux / macOS
 
-- `backend`: porta `8080`
-- `frontend`: porta `5173`
+```bash
+cd case-tecnico
+export DB_PASSWORD='C@seTecn!co123'
+export APP_JWT_SECRET='sua-chave-jwt-aqui'
+docker compose up --build
+```
 
-A comunicacao frontend -> backend ocorre pelo proxy `/api`.
+Serviços expostos:
+
+- backend: `http://localhost:8080`
+- frontend: `http://localhost:5173`
+- MySQL: porta interna `3306`
+
+No Docker, o frontend se comunica com o backend via proxy para `http://backend:8080`.
+
+## Fluxo de uso
+
+1. O usuário acessa o frontend e é redirecionado para o login.
+2. Após autenticação, o sistema direciona conforme o perfil.
+3. O administrador acessa cadastros e dashboards.
+4. Professores e alunos usam check-in, checkout e navegação por salas.
+
+## Usuários de teste
+
+O projeto possui dados iniciais para facilitar a validação da aplicação.
+
+Exemplos:
+
+- `admin`
+- `professor1`
+- `professor2`
+- `aluno1` até `aluno7`
+
+As senhas podem ser consultadas no dataloader do backend.
+
+## Rotas principais do frontend
+
+- `/login` → autenticação
+- `/` → página inicial institucional
+- `/about` → apresentação do sistema
+- `/usuarios` → cadastro de usuários
+- `/blocos` → gestão de blocos, andares e salas
+- `/presenca` → check-in e checkout
+- `/relatorios` → dashboards
+
+## Observações importantes
+
+- O frontend não usa URL hardcoded da API; a integração acontece por proxy.
+- O backend usa autenticação via token JWT.
+- O projeto foi estruturado para manter separação entre interface, regras de negócio e persistência.
+- O case original exigia CRUD de alunos e registro de entrada/saída; o projeto foi expandido para suportar o gerenciamento institucional completo do campus.
+
+## Comandos rápidos
+
+### Backend
+
+```bash
+cd backend
+./gradlew bootRun
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Docker
+
+```bash
+docker compose up --build
+```
+
