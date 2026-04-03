@@ -22,7 +22,7 @@ public class ApiExceptionHandler {
         }
 
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("message", "Payload invalido.");
+        body.put("message", "Payload inválido.");
         body.put("errors", errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
