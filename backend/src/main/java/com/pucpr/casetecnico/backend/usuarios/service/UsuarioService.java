@@ -1,7 +1,11 @@
 package com.pucpr.casetecnico.backend.usuarios.service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
+import com.pucpr.casetecnico.backend.ensalamento.presenca.model.PresencaSala;
+import com.pucpr.casetecnico.backend.ensalamento.presenca.service.PresencaSalaService;
 import com.pucpr.casetecnico.backend.usuarios.model.EnumPapelUsuario;
 import com.pucpr.casetecnico.backend.usuarios.model.Usuario;
 import com.pucpr.casetecnico.backend.usuarios.repository.UsuarioRepository;
@@ -33,6 +39,7 @@ public class UsuarioService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PresencaSalaService presencaSalaService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -106,7 +113,11 @@ public class UsuarioService implements UserDetailsService {
 
         Page<Usuario> usuarios = usuarioRepository.findAll(specification, pageable);
 
-        Page<UsuarioResponse> responsePage = usuarios.map(this::toResponse);
+        List<Long> idsPagina = usuarios.getContent().stream().map(Usuario::getId).toList();
+        Map<Long, PresencaSala> presencasAtivasPorUsuario = presencaSalaService.buscarAtivasPorUsuarioIds(idsPagina).stream()
+                .collect(Collectors.toMap(p -> p.getUsuario().getId(), Function.identity()));
+
+        Page<UsuarioResponse> responsePage = usuarios.map(usuario -> toResponse(usuario, presencasAtivasPorUsuario.get(usuario.getId())));
         return new UsuarioPageResponse(
                 responsePage.getContent(),
                 responsePage.getTotalElements(),
@@ -152,7 +163,11 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public UsuarioResponse buscarPorIdResponse(Long id) {
-        return toResponse(buscarPorId(id));
+        Usuario usuario = buscarPorId(id);
+        PresencaSala presencaAtiva = presencaSalaService.buscarAtivasPorUsuarioIds(List.of(id)).stream()
+                .findFirst()
+                .orElse(null);
+        return toResponse(usuario, presencaAtiva);
     }
 
     public Usuario buscarPorUsername(String username) {
@@ -210,13 +225,28 @@ public class UsuarioService implements UserDetailsService {
 
 
     private UsuarioResponse toResponse(Usuario usuario) {
+        return toResponse(usuario, null);
+    }
+
+    private UsuarioResponse toResponse(Usuario usuario, PresencaSala presencaAtiva) {
+        boolean emSala = presencaAtiva != null;
+        String blocoAtual = emSala ? presencaAtiva.getSala().getAndar().getBloco().getNome() : null;
+        String andarAtual = emSala ? presencaAtiva.getSala().getAndar().getNome() : null;
+        String salaAtual = emSala ? presencaAtiva.getSala().getNome() : null;
+        Instant entradaAtual = emSala ? presencaAtiva.getEntrada() : null;
+
         return new UsuarioResponse(
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getUsername(),
                 usuario.getCpf(),
                 usuario.getPapel(),
-                usuario.isAtivo());
+                usuario.isAtivo(),
+                emSala,
+                blocoAtual,
+                andarAtual,
+                salaAtual,
+                entradaAtual);
     }
 }
 
