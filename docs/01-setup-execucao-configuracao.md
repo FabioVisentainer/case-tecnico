@@ -93,6 +93,7 @@ Serviços:
 
 - O container MySQL cria banco `bd_casetecnico`.
 - O backend usa o usuário definido em `DB_USER` (padrão `casetecnico`).
+- Em primeira execução (volume novo), o MySQL cria automaticamente o usuário e permissões conforme as variáveis do Compose.
 
 Se houver erro de autenticação por mudança de usuário/senha, recrie os volumes:
 
