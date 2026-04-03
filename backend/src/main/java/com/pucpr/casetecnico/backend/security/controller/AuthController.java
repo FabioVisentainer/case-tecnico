@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.pucpr.casetecnico.backend.security.dto.AuthRequest;
 import com.pucpr.casetecnico.backend.security.dto.AuthMeResponse;
 import com.pucpr.casetecnico.backend.security.dto.AuthResponse;
@@ -27,6 +32,7 @@ import com.pucpr.casetecnico.backend.usuarios.service.UsuarioService;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Autenticação", description = "Login e dados do usuário autenticado")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -34,6 +40,11 @@ public class AuthController {
     private final UsuarioService usuarioService;
 
     @PostMapping("/login")
+    @Operation(summary = "Autenticar usuário", description = "Valida as credenciais e retorna o token JWT")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas ou usuário inativo")
+    })
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -52,6 +63,8 @@ public class AuthController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Dados do usuário autenticado", description = "Retorna nome, username e papel do usuário logado")
+    @ApiResponse(responseCode = "200", description = "Usuário autenticado encontrado")
     public AuthMeResponse me(Authentication authentication) {
         Usuario usuario = usuarioService.buscarPorUsername(authentication.getName());
         return new AuthMeResponse(usuario.getNome(), usuario.getUsername(), usuario.getPapel());
