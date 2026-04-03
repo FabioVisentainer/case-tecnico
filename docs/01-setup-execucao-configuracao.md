@@ -1,4 +1,4 @@
-# Setup, Execucao e Configuracao
+# Setup, Execução e Configuração
 
 Este guia descreve como configurar e executar o projeto localmente ou com Docker.
 
@@ -9,9 +9,9 @@ Este guia descreve como configurar e executar o projeto localmente ou com Docker
 - npm
 - Docker e Docker Compose (opcional)
 
-## 2) Variaveis de ambiente
+## 2) Variáveis de ambiente
 
-O projeto usa as seguintes variaveis:
+O projeto usa as seguintes variáveis:
 
 - `DB_HOST`
 - `DB_PORT`
@@ -32,7 +32,7 @@ APP_JWT_SECRET=troque-por-um-segredo-grande
 APP_JWT_EXPIRATION_MS=3600000
 ```
 
-## 3) Execucao local (sem Docker)
+## 3) Execução local (sem Docker)
 
 ### 3.1 Backend
 
@@ -74,7 +74,7 @@ npm run dev
 
 Frontend: `http://localhost:5173`
 
-## 4) Execucao com Docker Compose
+## 4) Execução com Docker Compose
 
 Na raiz do projeto:
 
@@ -83,7 +83,7 @@ Set-Location C:\PUCPR\case-tecnico
 docker compose up --build
 ```
 
-Servicos:
+Serviços:
 
 - frontend: `http://localhost:5173`
 - backend: `http://localhost:8080`
@@ -92,9 +92,9 @@ Servicos:
 ## 5) Banco de dados no Docker
 
 - O container MySQL cria banco `bd_casetecnico`.
-- O backend usa o usuario definido em `DB_USER` (padrao `casetecnico`).
+- O backend usa o usuário definido em `DB_USER` (padrão `casetecnico`).
 
-Se houve erro de autenticacao por mudanca de usuario/senha, recrie os volumes:
+Se houver erro de autenticação por mudança de usuário/senha, recrie os volumes:
 
 ```powershell
 docker compose down -v
@@ -106,7 +106,7 @@ docker compose up --build
 - UI: `http://localhost:8080/swagger-ui.html`
 - OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 
-## 7) Referencias rapidas
+## 7) Referências rápidas
 
 - Compose: `docker-compose.yml`
 - Perfil docker backend: `backend/src/main/resources/application-docker.properties`
